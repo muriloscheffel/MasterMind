@@ -18,8 +18,12 @@ public class Tela extends JFrame {
 
     public void iniciarJogo(int senhas, int tentativas, String modo) {
         setSize(500, 500);
-        painelJogo = new PainelJogo(senhas, tentativas, modo);
+        painelJogo = new PainelJogo(senhas, tentativas, modo, this);
         setContentPane(painelJogo);
+    }
+
+    public void fecharTela() {
+        dispose();
     }
 
 }

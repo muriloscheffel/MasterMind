@@ -19,8 +19,9 @@ public class PainelJogo extends JPanel {
     private JButton enviar;
     private JButton limpar;
     private String[] CORES = {"RED", "GREEN", "BLUE", "YELLOW", "PINK", "ORANGE"};
+    private Tela tela;
 
-    public PainelJogo(int senhas, int tentativas, String modo) {
+    public PainelJogo(int senhas, int tentativas, String modo, Tela tela) {
         this.tentativas = tentativas;
         this.senhas = senhas;
         this.modo = modo;
@@ -28,6 +29,7 @@ public class PainelJogo extends JPanel {
         this.tentativa = 0;
         this.senha = 0;
         this.resposta = new ArrayList<>();
+        this.tela = tela;
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         criaLinhas();
@@ -97,10 +99,13 @@ public class PainelJogo extends JPanel {
         } else {
             if(checaLinha()) {
                 JOptionPane.showMessageDialog(this, "Parabéns, você ganhou!");
+                tela.fecharTela();
             } else {
                 if(tentativa == tentativas - 1) {
                     JOptionPane.showMessageDialog(this, "Fim, você perdeu.");
+                    tela.fecharTela();
                 } else {
+                    verificaAcertos();
                     tentativa++;
                     senha = 0;
                 }
@@ -132,6 +137,20 @@ public class PainelJogo extends JPanel {
             }
         }
         System.out.println(resposta);
+    }
+
+    private void verificaAcertos() {
+        for(int i = 0; i < senhas; i++) {
+            Color selecionada = linhas[tentativa].getColor(i);
+            Color corCerta = resposta.get(i);
+
+            if(selecionada.equals(corCerta)) {
+                linhas[tentativa].setPino(i, "black");
+            }
+            else if(resposta.contains(selecionada)) {
+                linhas[tentativa].setPino(i, "white");
+            }
+        }
     }
 
     public int getTentativas() {
