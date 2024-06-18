@@ -4,7 +4,7 @@ public class App {
     
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            PrimeiraTela tela = new PrimeiraTela();
+            Tela tela = new Tela();
         });
     }
 }

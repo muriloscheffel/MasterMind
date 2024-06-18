@@ -1,20 +1,27 @@
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import javax.swing.*;
 
-public class PrimeiraTela extends JFrame {
-
+public class PainelOpcoes extends JPanel {
     private JComboBox<Integer> cbQuantSenha;
     private JComboBox<Integer> cbquantTentativa;
     private JComboBox<String> cbMode;
+    private Integer[] qntSenha;
+    private Integer[] qntTentativa;
+    private String[] modes;
+    private Tela tela;
 
-    public PrimeiraTela() {
-        Integer[] qntSenha = new Integer[]{4, 5, 6};
-        Integer[] qntTentativa = new Integer[]{1, 2, 3, 4, 5, 6, 7, 8, 9};
-        String[] modes = new String[]{"Normal", "Teste"};
 
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    public PainelOpcoes(Tela tela) {
+        qntSenha = new Integer[]{4, 5, 6};
+        qntTentativa = new Integer[]{1, 2, 3, 4, 5, 6, 7, 8, 9};
+        modes = new String[]{"Normal", "Teste"};
+        this.tela = tela;
 
+        inicializa();
+    }
+
+    public void inicializa() {
         cbQuantSenha = new JComboBox<>(qntSenha);
         cbquantTentativa = new JComboBox<>(qntTentativa);
         cbMode = new JComboBox<>(modes);
@@ -24,8 +31,6 @@ public class PrimeiraTela extends JFrame {
         JLabel lblQuantTentativa = new JLabel("Quantas tentativas?");
         JLabel lblMode = new JLabel("Modo de jogo:");
 
-        Container contentPane = getContentPane();
-        contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.Y_AXIS));
 
         JPanel rowSenha = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JPanel rowTentativas = new JPanel(new FlowLayout(FlowLayout.CENTER));
@@ -40,15 +45,15 @@ public class PrimeiraTela extends JFrame {
         rowModo.add(lblMode);
         rowModo.add(cbMode);
 
-        contentPane.add(rowSenha);
-        contentPane.add(rowTentativas);
-        contentPane.add(rowModo);
-        contentPane.add(btnComecar);
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+
+        add(rowSenha);
+        add(rowTentativas);
+        add(rowModo);
+        add(btnComecar);
 
         btnComecar.addActionListener(this::botaoStart);
 
-        pack();
-        setLocationRelativeTo(null);
         setVisible(true);
     }
 
@@ -57,8 +62,6 @@ public class PrimeiraTela extends JFrame {
         int tentativas = cbquantTentativa.getItemAt(cbquantTentativa.getSelectedIndex());
         String modo = cbMode.getItemAt(cbMode.getSelectedIndex());
 
-        SegundaTela segundaTela = new SegundaTela(senhas, tentativas, modo);
-        segundaTela.setVisible(true);
-        setVisible(false);
+        tela.iniciarJogo(senhas, tentativas, modo);
     }
 }
