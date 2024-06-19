@@ -49,6 +49,9 @@ public class Linha extends JPanel {
         }else if(cor.equals("white")) {
             vetorAcertos[index].setCor(new Cor("WHITE", Color.WHITE));
         }
+    }
 
+    public PinoPB getPino(int index) {
+        return vetorAcertos[index];
     }
 }

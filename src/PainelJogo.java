@@ -155,18 +155,27 @@ public class PainelJogo extends JPanel {
     }
 
     private void verificaAcertos() {
+        // Contador para pintar sempre o próximo espaço livre
         int cont = 0;
+        ArrayList<Color> posicaoCerta = new ArrayList<>();
 
+        // Verifica se está na posição certa e pinta de preto
         for(int i = 0; i < senhas; i++) {
             Color selecionada = linhas[tentativa].getColor(i);
             Color corCerta = resposta.get(i);
 
-            if(selecionada.equals(corCerta)) {
+            if (selecionada.equals(corCerta)) {
                 linhas[tentativa].setPino(cont, "black");
+                posicaoCerta.add(selecionada);
                 cont++;
-
             }
-            else if(resposta.contains(selecionada)) {
+        }
+
+        // Verifica se não está na posição certa mas contém na resposta
+        for(int i = 0; i < senhas; i++) {
+            Color selecionada = linhas[tentativa].getColor(i);
+
+            if (!posicaoCerta.contains(selecionada) && resposta.contains(selecionada)) {
                 linhas[tentativa].setPino(cont, "white");
                 cont++;
             }
