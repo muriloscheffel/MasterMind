@@ -9,23 +9,17 @@ public class PainelJogo extends JPanel {
     private int tentativa, tentativas, senha, senhas;
     private String modo;
     private ArrayList<Color> resposta;
-
     private JPanel painelCores;
     private PinoCL[] pinos;
-
     private Linha[] linhas;
-
     private JPanel topBar;
-
     private JPanel painelBotoes;
     private JButton enviar;
     private JButton limpar;
     private String[] CORES = {"RED", "GREEN", "BLUE", "YELLOW", "PINK", "ORANGE"};
     private Tela tela;
-
     private JPanel painelRespostas;
     private JPanel[] vetorRespostas;
-
     private JLabel lbTentativas;
 
     public PainelJogo(int senhas, int tentativas, String modo, Tela tela) {
@@ -42,12 +36,9 @@ public class PainelJogo extends JPanel {
         criaTopBar();
         geraSenha();
         criaLinhas();
-        
-        if(modo.equals("Teste")) {
-            criaRespostas();
-        }
-        criaPainelBotoes();
+        if(modo.equals("Teste")) { criaRespostas(); }
         inicializa();
+        criaPainelBotoes();
     }
 
     public void criaTopBar() {
@@ -140,7 +131,6 @@ public class PainelJogo extends JPanel {
 
     private boolean checaLinha() {
         for(int i = 0; i < senhas; i++) {
-            System.out.println(linhas[tentativa].getColor(i));
             if(!resposta.get(i).equals(linhas[tentativa].getColor(i))) {
                 return false;
             }
@@ -152,7 +142,7 @@ public class PainelJogo extends JPanel {
         Random random = new Random();
 
         for(int i = 0; i < senhas; i++) {
-            int ran = random.nextInt(0, 5);
+            int ran = random.nextInt(0, 6);
             String nomeCor = CORES[ran];
             Color cor = Cores.getInstance().getCor(nomeCor).getCor();
             if(!resposta.contains(cor)) {
