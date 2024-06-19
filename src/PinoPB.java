@@ -6,7 +6,6 @@ public class PinoPB extends Pino {
         super(cor);
     }
 
-
     public void setCor(Cor cor){
         if (cor.getNomeDaCor().equals("BLACK") ||
                 cor.getNomeDaCor().equals("WHITE") ||

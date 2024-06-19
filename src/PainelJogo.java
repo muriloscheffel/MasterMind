@@ -1,8 +1,8 @@
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.Random;
+import javax.swing.*;
 
 public class PainelJogo extends JPanel {
 
@@ -15,11 +15,18 @@ public class PainelJogo extends JPanel {
 
     private Linha[] linhas;
 
+    private JPanel topBar;
+
     private JPanel painelBotoes;
     private JButton enviar;
     private JButton limpar;
     private String[] CORES = {"RED", "GREEN", "BLUE", "YELLOW", "PINK", "ORANGE"};
     private Tela tela;
+
+    private JPanel painelRespostas;
+    private JPanel[] vetorRespostas;
+
+    private JLabel lbTentativas;
 
     public PainelJogo(int senhas, int tentativas, String modo, Tela tela) {
         this.tentativas = tentativas;
@@ -32,10 +39,27 @@ public class PainelJogo extends JPanel {
         this.tela = tela;
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        criaTopBar();
+        geraSenha();
         criaLinhas();
+        
+        if(modo.equals("Teste")) {
+            criaRespostas();
+        }
         criaPainelBotoes();
         inicializa();
-        geraSenha();
+    }
+
+    public void criaTopBar() {
+        topBar = new JPanel();
+        JLabel lbSenhas = new JLabel("Senhas: " + senhas);
+        lbTentativas = new JLabel("Tentativas: " + tentativas);
+        JLabel lbModo = new JLabel("Modo: " + modo);
+        topBar.add(lbSenhas);
+        topBar.add(lbTentativas);
+        topBar.add(lbModo);
+
+        add(topBar);
     }
 
     public void criaLinhas() {
@@ -108,6 +132,7 @@ public class PainelJogo extends JPanel {
                     verificaAcertos();
                     tentativa++;
                     senha = 0;
+                    lbTentativas.setText("Tentativas: " + (tentativas - tentativa));
                 }
             }
         }
@@ -128,10 +153,10 @@ public class PainelJogo extends JPanel {
 
         for(int i = 0; i < senhas; i++) {
             int ran = random.nextInt(0, 5);
-            String cor = CORES[ran];
-            Color core = Cores.getInstance().getCor(cor).getCor();
-            if(!resposta.contains(core)) {
-                resposta.add(core);
+            String nomeCor = CORES[ran];
+            Color cor = Cores.getInstance().getCor(nomeCor).getCor();
+            if(!resposta.contains(cor)) {
+                resposta.add(cor);
             } else {
                 i--;
             }
@@ -140,17 +165,35 @@ public class PainelJogo extends JPanel {
     }
 
     private void verificaAcertos() {
+        int cont = 0;
+
         for(int i = 0; i < senhas; i++) {
             Color selecionada = linhas[tentativa].getColor(i);
             Color corCerta = resposta.get(i);
 
             if(selecionada.equals(corCerta)) {
-                linhas[tentativa].setPino(i, "black");
+                linhas[tentativa].setPino(cont, "black");
+                cont++;
+
             }
             else if(resposta.contains(selecionada)) {
-                linhas[tentativa].setPino(i, "white");
+                linhas[tentativa].setPino(cont, "white");
+                cont++;
             }
         }
+    }
+
+    public void criaRespostas() {
+        vetorRespostas = new JPanel[senhas];
+        painelRespostas = new JPanel();
+        painelRespostas.setLayout(new GridLayout(1, senhas));
+
+        for(int i = 0; i < senhas; i++) {
+            vetorRespostas[i] = new JPanel();
+            vetorRespostas[i].setBackground(resposta.get(i));
+            painelRespostas.add(vetorRespostas[i]);
+        }
+        add(painelRespostas);
     }
 
     public int getTentativas() {
