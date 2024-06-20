@@ -194,18 +194,6 @@ public class PainelJogo extends JPanel {
         }
         add(painelRespostas);
     }
-
-    public int getTentativas() {
-        return tentativas;
-    }
-
-    public int getSenhas() {
-        return senhas;
-    }
-
-    public String getModo() {
-        return modo;
-    }
 }
 
 
