@@ -2,6 +2,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 
+// Painel inicial de menu de opções.
+// É o primeiro a ser iniciado.
+
 public class PainelOpcoes extends JPanel {
     private JComboBox<Integer> cbQuantSenha;
     private JComboBox<Integer> cbquantTentativa;
@@ -21,6 +24,7 @@ public class PainelOpcoes extends JPanel {
         inicializa();
     }
 
+    // Cria todos os elementos da tela
     public void inicializa() {
         cbQuantSenha = new JComboBox<>(qntSenha);
         cbquantTentativa = new JComboBox<>(qntTentativa);
@@ -57,11 +61,13 @@ public class PainelOpcoes extends JPanel {
         setVisible(true);
     }
 
+    // Método acionado ao clicar no botão 'Começar'
     public void botaoStart(ActionEvent ev) {
         int senhas = cbQuantSenha.getItemAt(cbQuantSenha.getSelectedIndex());
         int tentativas = cbquantTentativa.getItemAt(cbquantTentativa.getSelectedIndex());
         String modo = cbMode.getItemAt(cbMode.getSelectedIndex());
 
+        // Troca a exibição para a tela do jogo
         tela.iniciarJogo(senhas, tentativas, modo);
     }
 }

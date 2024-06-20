@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Random;
 import javax.swing.*;
 
+// Painel do jogo
+// Iniciado ao clicar no botão 'Começar'
+
 public class PainelJogo extends JPanel {
 
     private int tentativa, tentativas, senha, senhas;
@@ -33,14 +36,19 @@ public class PainelJogo extends JPanel {
         this.tela = tela;
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+
+        // Métodos que criam os elementos na tela
         criaTopBar();
         geraSenha();
         criaLinhas();
+        // if caso o usuário opte por modo de teste
         if(modo.equals("Teste")) { criaRespostas(); }
-        inicializa();
-        criaPainelBotoes();
+        criaBotoesSubClear();
+        criaBotoesCores();
     }
 
+    // Cria uma barra em cima com as informações do jogador,
+    // contendo senha, tentativas e modo.
     public void criaTopBar() {
         topBar = new JPanel();
         JLabel lbSenhas = new JLabel("Senhas: " + senhas);
@@ -53,17 +61,18 @@ public class PainelJogo extends JPanel {
         add(topBar);
     }
 
+    // Cria os paineis a serem preenchidos pelo jogador
+    // Utilizado um vetor de 'Linha' com o número de senhas e tentativas
     public void criaLinhas() {
-
         for(int i = 0; i < linhas.length; i++) {
-
             Linha linha = new Linha(senhas);
             linhas[i] = linha;
             add(linha);
         }
     }
 
-    public void criaPainelBotoes() {
+    // Painel com botões clicáveis
+    public void criaBotoesCores() {
         pinos = new PinoCL[6];
         painelCores = new JPanel();
         painelCores.setLayout(new GridLayout(1, 6));
@@ -78,7 +87,8 @@ public class PainelJogo extends JPanel {
         add(painelCores);
     }
 
-    public void inicializa() {
+    // Cria os botões de enviar e limpar
+    public void criaBotoesSubClear() {
         painelBotoes = new JPanel();
         painelBotoes.setLayout(new GridLayout(1, 2));
 
@@ -93,33 +103,40 @@ public class PainelJogo extends JPanel {
         enviar.addActionListener(this::enviarLinha);
     }
 
+    // Ação ao clicar nas cores
     private void clickColor(ActionEvent event) {
+        // Pega a cor
         Cor selectedColor = Cores.getInstance().getCor(event.getActionCommand());
 
         if(senha < senhas) {
+            // Seta o painel com a cor clicada
             linhas[tentativa].setColor(senha, selectedColor);
             senha++;
         }
 
     }
 
+    // Reseta linha para escolher novas cores
     private void limparLinha(ActionEvent ev) {
         linhas[tentativa].limpar();
         senha = 0;
     }
 
+    // Método chamado ao clicar em enviar
     private void enviarLinha(ActionEvent ev) {
-        if(senha != senhas) {
+
+        if(senha != senhas) { // Verifica se todos campos foram preenchidos
             JOptionPane.showMessageDialog(this, "Preencha todos os campos.");
-        } else {
-            if(checaLinha()) {
+        }
+        else {  // Se todos campos foram preenchidos...
+            if(checaLinha()) {  // Caso o jogador tenha acertado todos as cores
                 JOptionPane.showMessageDialog(this, "Parabéns, você ganhou!");
                 tela.fecharTela();
-            } else {
-                if(tentativa == tentativas - 1) {
+            } else {  // Caso não tenha acertado todas as cores...
+                if(tentativa == tentativas - 1) {  // Se acabou as tentativas
                     JOptionPane.showMessageDialog(this, "Fim, você perdeu.");
                     tela.fecharTela();
-                } else {
+                } else {  // Se errou mas ainda tem tentativas a serem feitas
                     verificaAcertos();
                     tentativa++;
                     senha = 0;
@@ -129,6 +146,7 @@ public class PainelJogo extends JPanel {
         }
     }
 
+    // Verifica se a senha bate com as respostas do jogador
     private boolean checaLinha() {
         for(int i = 0; i < senhas; i++) {
             if(!resposta.get(i).equals(linhas[tentativa].getColor(i))) {
@@ -138,6 +156,8 @@ public class PainelJogo extends JPanel {
         return true;
     }
 
+    // Usa o método random para gerar um Int de 0 até 6
+    // Para cada um desses valores existe uma cor correspondente
     public void geraSenha() {
         Random random = new Random();
 
@@ -154,6 +174,7 @@ public class PainelJogo extends JPanel {
         System.out.println(resposta);
     }
 
+    // Lógica para criar os pinos pretos e brancos em caso de algum acerto
     private void verificaAcertos() {
         // Contador para pintar sempre o próximo espaço livre
         int cont = 0;
@@ -176,7 +197,11 @@ public class PainelJogo extends JPanel {
         for(int i = 0; i < senhas; i++) {
             Color selecionada = linhas[tentativa].getColor(i);
 
-            if (!posicaoCerta.contains(selecionada) && resposta.contains(selecionada) && !posicaoErrada.contains(selecionada)) {
+            if(
+                !posicaoCerta.contains(selecionada) && 
+                resposta.contains(selecionada) && 
+                !posicaoErrada.contains(selecionada)
+            ) {
                 linhas[tentativa].setPino(cont, "white");
                 posicaoErrada.add(selecionada);
                 cont++;
@@ -184,6 +209,7 @@ public class PainelJogo extends JPanel {
         }
     }
 
+    // Mostra a resposta gerada
     public void criaRespostas() {
         vetorRespostas = new JPanel[senhas];
         painelRespostas = new JPanel();
