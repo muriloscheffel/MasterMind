@@ -158,6 +158,7 @@ public class PainelJogo extends JPanel {
         // Contador para pintar sempre o próximo espaço livre
         int cont = 0;
         ArrayList<Color> posicaoCerta = new ArrayList<>();
+        ArrayList<Color> posicaoErrada = new ArrayList<>();
 
         // Verifica se está na posição certa e pinta de preto
         for(int i = 0; i < senhas; i++) {
@@ -175,8 +176,9 @@ public class PainelJogo extends JPanel {
         for(int i = 0; i < senhas; i++) {
             Color selecionada = linhas[tentativa].getColor(i);
 
-            if (!posicaoCerta.contains(selecionada) && resposta.contains(selecionada)) {
+            if (!posicaoCerta.contains(selecionada) && resposta.contains(selecionada) && !posicaoErrada.contains(selecionada)) {
                 linhas[tentativa].setPino(cont, "white");
+                posicaoErrada.add(selecionada);
                 cont++;
             }
         }
