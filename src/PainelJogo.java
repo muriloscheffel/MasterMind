@@ -24,25 +24,34 @@ public class PainelJogo extends JPanel {
     private JPanel painelRespostas;
     private JPanel[] vetorRespostas;
     private JLabel lbTentativas;
+    private JLabel lbDemo;
+    ArrayList<Color> coresTentadas;
 
+    
     public PainelJogo(int senhas, int tentativas, String modo, Tela tela) {
         this.tentativas = tentativas;
         this.senhas = senhas;
         this.modo = modo;
-        this.linhas = new Linha[tentativas];
-        this.tentativa = 0;
-        this.senha = 0;
-        this.resposta = new ArrayList<>();
         this.tela = tela;
+        linhas = new Linha[tentativas];
+        tentativa = 0;
+        senha = 0;
+        resposta = new ArrayList<>();
+        lbDemo = new JLabel("Você está no modo teste, aqui está a resposta:");
+        coresTentadas = new ArrayList<>(senhas);
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         // Métodos que criam os elementos na tela
-        criaTopBar();
         geraSenha();
+        criaTopBar();
+        if(modo.equals("Teste")) {
+            add(lbDemo);
+            criaRespostas();
+        }
         criaLinhas();
         // if caso o usuário opte por modo de teste
-        if(modo.equals("Teste")) { criaRespostas(); }
+//        if(modo.equals("Teste")) { criaRespostas(); }
         criaBotoesSubClear();
         criaBotoesCores();
     }
@@ -110,8 +119,15 @@ public class PainelJogo extends JPanel {
 
         if(senha < senhas) {
             // Seta o painel com a cor clicada
-            linhas[tentativa].setColor(senha, selectedColor);
-            senha++;
+            if(!coresTentadas.contains(selectedColor.getCor())) {   // Verifica se não é cor repetida
+                linhas[tentativa].setColor(senha, selectedColor);
+                coresTentadas.add(selectedColor.getCor());
+                senha++;
+                System.out.println(coresTentadas.size());
+            }
+            else {
+                JOptionPane.showMessageDialog(this, "Você já escolheu essa cor! Não tem cores repitidas na resposta.");
+            }
         }
 
     }
@@ -119,6 +135,7 @@ public class PainelJogo extends JPanel {
     // Reseta linha para escolher novas cores
     private void limparLinha(ActionEvent ev) {
         linhas[tentativa].limpar();
+        coresTentadas.clear();
         senha = 0;
     }
 
@@ -141,6 +158,7 @@ public class PainelJogo extends JPanel {
                     tentativa++;
                     senha = 0;
                     lbTentativas.setText("Tentativas: " + (tentativas - tentativa));
+                    coresTentadas.clear();
                 }
             }
         }
@@ -158,7 +176,7 @@ public class PainelJogo extends JPanel {
 
     // Usa o método random para gerar um Int de 0 até 6
     // Para cada um desses valores existe uma cor correspondente
-    public void geraSenha() {
+    private void geraSenha() {
         Random random = new Random();
 
         for(int i = 0; i < senhas; i++) {
@@ -223,5 +241,3 @@ public class PainelJogo extends JPanel {
         add(painelRespostas);
     }
 }
-
-
