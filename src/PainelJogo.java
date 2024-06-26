@@ -45,13 +45,13 @@ public class PainelJogo extends JPanel {
         // Métodos que criam os elementos na tela
         geraSenha();
         criaTopBar();
+
+//      if caso o usuário opte por modo de teste
         if(modo.equals("Teste")) {
             add(lbDemo);
             criaRespostas();
         }
         criaLinhas();
-        // if caso o usuário opte por modo de teste
-//        if(modo.equals("Teste")) { criaRespostas(); }
         criaBotoesSubClear();
         criaBotoesCores();
     }
@@ -123,10 +123,11 @@ public class PainelJogo extends JPanel {
                 linhas[tentativa].setColor(senha, selectedColor);
                 coresTentadas.add(selectedColor.getCor());
                 senha++;
-                System.out.println(coresTentadas.size());
             }
             else {
-                JOptionPane.showMessageDialog(this, "Você já escolheu essa cor! Não tem cores repitidas na resposta.");
+                JOptionPane.showMessageDialog(
+                    this,
+                    "Você já escolheu essa cor! Não tem cores repitidas na resposta.");
             }
         }
 
@@ -197,14 +198,13 @@ public class PainelJogo extends JPanel {
         // Contador para pintar sempre o próximo espaço livre
         int cont = 0;
         ArrayList<Color> posicaoCerta = new ArrayList<>();
-        ArrayList<Color> posicaoErrada = new ArrayList<>();
 
         // Verifica se está na posição certa e pinta de preto
         for(int i = 0; i < senhas; i++) {
             Color selecionada = linhas[tentativa].getColor(i);
             Color corCerta = resposta.get(i);
 
-            if (selecionada.equals(corCerta)) {
+            if(selecionada.equals(corCerta)) {
                 linhas[tentativa].setPino(cont, "black");
                 posicaoCerta.add(selecionada);
                 cont++;
@@ -215,13 +215,8 @@ public class PainelJogo extends JPanel {
         for(int i = 0; i < senhas; i++) {
             Color selecionada = linhas[tentativa].getColor(i);
 
-            if(
-                !posicaoCerta.contains(selecionada) && 
-                resposta.contains(selecionada) && 
-                !posicaoErrada.contains(selecionada)
-            ) {
+            if(!posicaoCerta.contains(selecionada) && resposta.contains(selecionada)) {
                 linhas[tentativa].setPino(cont, "white");
-                posicaoErrada.add(selecionada);
                 cont++;
             }
         }
